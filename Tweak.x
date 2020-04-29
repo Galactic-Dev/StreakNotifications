@@ -18,7 +18,6 @@ int formatSpeciferType;
       NSMutableDictionary *aps = [[NSMutableDictionary alloc] initWithDictionary:[arg2 objectForKey:@"aps"]];
       NSMutableDictionary *alert = [[NSMutableDictionary alloc] initWithDictionary:[[arg2 objectForKey:@"aps"] objectForKey:@"alert"]];
 
-
 			NSMutableDictionary *streakMetadataDict = [NSJSONSerialization JSONObjectWithData:[streakMetadata dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&error];
 			int streakLength = [[streakMetadataDict objectForKey:@"snapstreak_count"] intValue];
 
@@ -85,7 +84,7 @@ static void loadPrefs(){
 			formatSpeciferType = 0;
 		}
 
-	
+
 }
 
 
