@@ -1,0 +1,9 @@
+Package: com.galacticdev.streaknotifications
+Name: StreakNotifications
+Depends: mobilesubstrate
+Version: 0.2
+Architecture: iphoneos-arm
+Description: Show how long until snapchat streak expires when you get a snapchat notification.
+Maintainer: Galactic Dev
+Author: Galactic Dev
+Section: Tweaks
