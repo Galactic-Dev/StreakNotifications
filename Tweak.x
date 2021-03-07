@@ -1,3 +1,4 @@
+#include <RemoteLog.h>
 @interface UNPushNotificationRequestBuilder
 -(id)initWithIdentifier:(id)arg1 payload:(id)arg2 bundleIdentifier:(id)arg3;
 @end
@@ -7,11 +8,12 @@ int formatSpeciferType;
 %hook UNPushNotificationRequestBuilder
 -(id)initWithIdentifier:(id)arg1 payload:(id)arg2 bundleIdentifier:(id)arg3 {
   	if([arg3 isEqualToString:@"com.toyopagroup.picaboo"]){
-      NSDictionary *prefs = [[NSDictionary alloc] initWithContentsOfFile:@"/User/Library/Preferences/com.galacticdev.streaknotificationsprefs.plist"];
-      NSLog(@"prefs = %@", prefs);
+      NSLog(@"STREAK METADATA: %@", arg2);
+      //NSDictionary *prefs = [[NSDictionary alloc] initWithContentsOfFile:@"/User/Library/Preferences/com.galacticdev.streaknotificationsprefs.plist"];
+      //NSLog(@"prefs = %@", prefs);
 
 		__block NSString *streakMetadata = [arg2 objectForKey:@"snapstreak_metadata"];
-		NSLog(@"streakMetadata = %@", streakMetadata);
+		//NSLog(@"streakMetadata = %@", streakMetadata);
 		NSError *error;
 		if (streakMetadata !=nil) {
       NSMutableDictionary *payload = [[NSMutableDictionary alloc] initWithDictionary:arg2];
@@ -31,20 +33,33 @@ int formatSpeciferType;
       timeInterval -= hours * (60 * 60);
       int minutes = timeInterval / 60;
 
-      __block NSString *bodyString;
+      NSString *bodyString;
       if(streakLength > 0){
-        if(formatSpeciferType == 0){
-          bodyString = [NSString stringWithFormat:@"%d day long streak will expire in %dd %dh %dm", streakLength, days, hours, minutes];
-        }
-        else if(formatSpeciferType == 1){
-          bodyString = [NSString stringWithFormat:@"🔥%d ⏰%dd %dh %dm", streakLength, days, hours, minutes];
-        }
-        else if(formatSpeciferType == 2){
-          bodyString = [NSString stringWithFormat:@"⏰%dd %dh %dm", days, hours, minutes];
-        }
-        else if(formatSpeciferType == 3){
-          bodyString = [NSString stringWithFormat:@"🔥%d", streakLength];
-        }
+          NSString *streakLengthString;
+          if(streakLength == 100){
+              streakLengthString = @"💯";
+          }
+          else {
+              streakLengthString = [NSString stringWithFormat:@"%d", streakLength];
+          }
+          switch (formatSpeciferType){
+              case 0: {
+                  bodyString = [NSString stringWithFormat:@"%d day long streak will expire in %dd %dh %dm", streakLength, days, hours, minutes];
+                  break;
+              }
+              case 1: {
+                  bodyString = [NSString stringWithFormat:@"🔥%@ ⏰%dd %dh %dm", streakLengthString, days, hours, minutes];
+                  break;
+              }
+              case 2: {
+                  bodyString = [NSString stringWithFormat:@"⏰%dd %dh %dm", days, hours, minutes];
+                  break;
+              }
+              case 3: {
+                  bodyString = [NSString stringWithFormat:@"🔥%@", streakLengthString];
+                  break;
+              }
+          }
       }
       else {
         bodyString = @"";
