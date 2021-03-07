@@ -1,4 +1,3 @@
-#import "NSTask.h"
 #include "SNCRootListController.h"
 #import <Preferences/PSSpecifier.h>
 @implementation SNCRootListController
